@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	accessKey = "44917a14-0684b378-rbr45t6yr4-ae79f"
-	secretKey = "09ac5548-edc081d4-49257a73-7cf8a"
+	accessKey = ""
+	secretKey = ""
 )
 
 func TestTradeObj_SafeTrade(t *testing.T) {
