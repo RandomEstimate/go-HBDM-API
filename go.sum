@@ -1,0 +1,4 @@
+github.com/RandomEstimate/go-log v0.0.0-20210508023202-93aad93af27b h1:K/ympwoI9C3ybX1XT5FbII6/cnX97u2170CI56zDqNw=
+github.com/RandomEstimate/go-log v0.0.0-20210508023202-93aad93af27b/go.mod h1:5XCqegK/bZGaJDj/XPcwhlPC14Fw+xTTOuV40M4zh5o=
+github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
+github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
