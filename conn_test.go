@@ -119,3 +119,18 @@ func TestTradeObj_GetOrderMap(t *testing.T) {
 	}
 
 }
+
+func TestTradeObj_RepairOrderMap(t *testing.T) {
+	logFile := goLog.NewFileLog("", "log.log", goLog.TRACE)
+	logFile.Start()
+	defer logFile.Close()
+	logFile.I("Start logfile")
+	obj := NewTradeObj(accessKey, secretKey, "SUSHI-USD", logFile)
+	go obj.StartConn()
+
+	for i := 0; i <= 30; i++ {
+		time.Sleep(time.Second * 3)
+		fmt.Println(obj.GetOrderMap())
+		fmt.Println(obj.RepairOrderMap())
+	}
+}

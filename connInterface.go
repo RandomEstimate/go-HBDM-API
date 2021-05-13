@@ -161,3 +161,34 @@ func (a *TradeObj) SafeCancel(param *CancelMode) error {
 	return fmt.Errorf("miss err")
 
 }
+
+func (a *TradeObj) RepairOrderMap() error {
+	o := &SearchOrderMode{
+		ContractCode: a.symbol,
+	}
+	order, err := a.SearchOrder(o)
+	if err != nil {
+		a.logFile.E("RepairOrderMap() err:", err)
+		return err
+	}
+
+	a.m1.Lock()
+	defer a.m1.Unlock()
+	for k, _ := range a.orderMap {
+		delete(a.orderMap, k)
+	}
+	for _, v := range order.Data.Orders {
+		o_ := OrderInfo(TradeOrder{
+			Symbol:      v.Symbol,
+			Direction:   v.Direction,
+			Offset:      v.Offset,
+			Status:      int(v.Status),
+			OrderId:     v.OrderId,
+			OrderIdStr:  fmt.Sprint(v.OrderId),
+			OrderType:   v.OrderType,
+			TradeVolume: v.TradeVolume,
+		})
+		a.orderMap[OrderId(o_.OrderId)] = o_
+	}
+	return nil
+}
