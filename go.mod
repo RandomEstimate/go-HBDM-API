@@ -1,4 +1,4 @@
-module TradeApi
+module github.com/RandomEstimate/go-HBDM-API
 
 go 1.12
 
