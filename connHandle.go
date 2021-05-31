@@ -87,20 +87,20 @@ func (a *TradeObj) handleTradeOrder(d *TradeOrder) {
 	if d.Status == 3 || d.Status == 5 || d.Status == 6 || d.Status == 7 {
 		if d.Status == 3 {
 			a.orderMap[OrderId(d.OrderId)] = OrderInfo(*d)
-			if s, ok := a.certainMap[OrderId(d.ClientOrderId)]; ok {
-				s.c <- d.ClientOrderId
-				a.delCertainMap(OrderId(d.ClientOrderId))
-			}
 		}
-
 		if d.Status == 5 || d.Status == 6 || d.Status == 7 {
 			delete(a.orderMap, OrderId(d.OrderId))
-			if s, ok := a.certainMap[OrderId(d.OrderId)]; ok {
-				s.c <- d.OrderId
-				a.delCertainMap(OrderId(d.OrderId))
-			}
 		}
-
+		if s, ok := a.certainMap[OrderId(d.ClientOrderId)]; ok {
+			s.c <- d.ClientOrderId
+			a.delCertainMap(OrderId(d.ClientOrderId))
+			return
+		}
+		if s, ok := a.certainMap[OrderId(d.OrderId)]; ok {
+			s.c <- d.OrderId
+			a.delCertainMap(OrderId(d.OrderId))
+			return
+		}
 
 	}
 
@@ -188,7 +188,6 @@ func (a *TradeObj) StartConn() {
 
 		a.logFile.E("login err:%v", logErr)
 	}
-
 
 	subErr := a.sub()
 	if subErr != nil {
