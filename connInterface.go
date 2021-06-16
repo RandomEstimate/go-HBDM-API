@@ -55,7 +55,6 @@ func (a *TradeObj) SafeTrade(param *OrderMode) error {
 	c2 := make(chan string, 1)
 
 	errChan := make(chan *OrderResponse, 1)
-	defer close(errChan)
 
 	go func() {
 		resp, err := a.BatchOrder(param)
