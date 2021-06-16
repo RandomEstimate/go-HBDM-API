@@ -1,6 +1,7 @@
 package HBDM_API
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -53,6 +54,9 @@ func (a *TradeObj) SafeTrade(param *OrderMode) error {
 	m := sync.RWMutex{}
 	c2 := make(chan string, 1)
 
+	errChan := make(chan *OrderResponse, 1)
+	defer close(errChan)
+
 	go func() {
 		resp, err := a.BatchOrder(param)
 		if err != nil {
@@ -63,6 +67,9 @@ func (a *TradeObj) SafeTrade(param *OrderMode) error {
 			delete(id, idOrder[v.Index-1])
 		}
 		m.Unlock()
+
+		// 返回错误信息
+		errChan <- resp
 
 	}()
 
@@ -93,7 +100,19 @@ func (a *TradeObj) SafeTrade(param *OrderMode) error {
 			a.logFile.I("Trade success time=%v", time.Now())
 			return nil
 		case "time out":
-			a.logFile.I("Trade time out time=%v", time.Now())
+
+			// time out 记录订单信息 以及request返回信息
+			var errInfo *OrderResponse
+			select {
+			case errInfo = <-errChan:
+			default:
+			}
+			// 序列化传入log参数
+			orderInfo2string, _ := json.Marshal(param)
+			errInfo2string, _ := json.Marshal(errInfo)
+			a.logFile.E("Trade time out time=%v "+
+				"orderInfo=%v errInfo=%v", time.Now(), orderInfo2string, errInfo2string)
+
 			return fmt.Errorf("time out")
 		}
 	}
