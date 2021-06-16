@@ -77,3 +77,16 @@ func (a *TradeObj) Position(param *PositionMode) (*PositionResponse, error) {
 	d, err := RequestDo(a.restClient, req, new(PositionResponse))
 	return d.(*PositionResponse), err
 }
+
+//-------------------------------------------------------------------------------------------------------------------
+// 获取账户权益接口
+func (a *TradeObj) MarginPosition(param *MarginMode) (*MarginResponse, error) {
+
+	strUrl := "/swap-api/v1/swap_account_position_info"
+	method := "POST"
+	strUrl = ApiKeyReady(method, strUrl, a.accessKey, a.secretKey)
+
+	req := ParamReady(strUrl, param, method)
+	d, err := RequestDo(a.restClient, req, new(MarginResponse))
+	return d.(*MarginResponse), err
+}
