@@ -110,7 +110,7 @@ func (a *TradeObj) SafeTrade(param *OrderMode) error {
 			orderInfo2string, _ := json.Marshal(param)
 			errInfo2string, _ := json.Marshal(errInfo)
 			a.logFile.E("Trade time out time=%v "+
-				"orderInfo=%v errInfo=%v", time.Now(), orderInfo2string, errInfo2string)
+				"orderInfo=%v errInfo=%v", time.Now(), string(orderInfo2string), errInfo2string)
 
 			return fmt.Errorf("time out")
 		}
